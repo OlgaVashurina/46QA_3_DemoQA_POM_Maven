@@ -125,29 +125,24 @@ public class PracticeFormPage extends BasePage {
         String[] dateParts = date.split(" ");
 
          if (dateParts.length != 3) {
-            throw new IllegalArgumentException("Некорректный формат даты. Ожидается 'день месяц год', например '04 May 1965'.");
+            throw new IllegalArgumentException("Некорректный формат даты.");
         }
 
         String day = dateParts[0];
         String month = dateParts[1];
         String year = dateParts[2];
 
-        // Убираем ведущий ноль, если он есть
         if (day.startsWith("0")) {
             day = day.substring(1);
         }
 
-        // Открываем поле выбора даты
         click(dateOfBirthInput);
 
-        // Явное ожидание появления выпадающего списка месяца
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOf(monthSelect));
 
-        // Выбираем месяц
         new Select(monthSelect).selectByVisibleText(month);
 
-        // Выбираем год
         new Select(yearSelect).selectByVisibleText(year);
 
         String dayXpath = String.format("//div[contains(@class, 'react-datepicker__day') and text()='%s' and not(contains(@class, 'outside-month'))]", day);
