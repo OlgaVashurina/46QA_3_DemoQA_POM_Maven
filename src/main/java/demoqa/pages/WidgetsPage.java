@@ -21,6 +21,7 @@ public class WidgetsPage extends BasePage {
         super(driver);
     }
 
+    //* Old Style Select Menu
     @FindBy(id = "oldSelectMenu")
     WebElement oldSelectMenu;
 
@@ -31,6 +32,7 @@ public class WidgetsPage extends BasePage {
         return this;
     }
 
+    //* MultiSelectMenu
     @FindBy(id = "react-select-4-input")
     WebElement inputSelect;
 

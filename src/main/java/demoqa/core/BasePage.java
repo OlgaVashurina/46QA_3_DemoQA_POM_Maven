@@ -27,7 +27,7 @@ public class BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    public void hideAds(){
+    public void hideAds() {
         js.executeScript("document.getElementById('adplus-anchor').style.display='none';");
         js.executeScript("document.querySelector('footer').style.display='none';");
     }
@@ -64,21 +64,22 @@ public class BasePage {
     }
 
     protected void scrollTo(int y) {
-        js.executeScript("window.scrollBy("+0+"," + y + ")");
+        js.executeScript("window.scrollBy(" + 0 + "," + y + ")");
     }
 
-    public void scrollToElement(WebElement element){
+    public void scrollToElement(WebElement element) {
         wait.until(ExpectedConditions.visibilityOf(element));
-        js.executeScript("arguments[0].scrollIntoView(true);",element);
+        js.executeScript("arguments[0].scrollIntoView(true);", element);
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
     protected void shouldHaveText(WebElement element, String text, int timeout) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(timeout));
         try {
-            wait.until(ExpectedConditions.textToBePresentInElement(element, text));
-            String actualText = element.getText();
-            Assert.assertTrue(actualText.contains(text));
+            // Переменная будет хранить результат ожидания элемента
+            boolean isTextPresent = wait.until(ExpectedConditions.textToBePresentInElement(element, text));
+            Assert.assertTrue(isTextPresent,
+                    "Expected text: [" + text + "], actual text: [" + element.getText() + "] in element: [" + element + "]");
         } catch (TimeoutException e) {
             //throw new TimeoutException(e);
         }

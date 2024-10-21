@@ -1,84 +1,77 @@
 package demoqa.pages;
 
 import demoqa.core.BasePage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import java.awt.AWTException;
-import java.awt.Robot;
+import org.testng.Assert;
+
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class TextBoxPage extends BasePage {
-
-    @FindBy(id = "userName")
-    WebElement fullName;
-
-    @FindBy(id = "userEmail")
-    WebElement email;
-
-    @FindBy(id = "currentAddress")
-    WebElement currentAddress;
-
-    @FindBy(id = "permanentAddress")
-    WebElement permanentAddress;
-
-    @FindBy(id = "submit")
-    WebElement submitButton;
-
     public TextBoxPage(WebDriver driver) {
         super(driver);
     }
 
-    public TextBoxPage enterPersonalData(String name, String emailAddress, String address) {
-        fullName.sendKeys(name);
-        email.sendKeys(emailAddress);
-        currentAddress.sendKeys(address);
+    @FindBy(id = "userName")
+    WebElement userName;
+    @FindBy(id = "userEmail")
+    WebElement userEmail;
+    @FindBy(id = "currentAddress")
+    WebElement currentAddress;
+
+    public TextBoxPage enterPersonalData(String name, String email, String address) {
+        type(userName, name);
+        type(userEmail, email);
+        type(currentAddress, address);
         return this;
     }
 
-    public TextBoxPage keyboardEvent() {
-        try {
-            currentAddress.click();
-            Robot robot = new Robot();
+    public TextBoxPage keyboardEvent() throws AWTException {
+        Robot robot = new Robot();
+        // Ctrl + A
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_A);
+        robot.keyRelease(KeyEvent.VK_A);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
 
-            robot.keyPress(KeyEvent.VK_CONTROL);
-            robot.keyPress(KeyEvent.VK_A);
-            robot.keyRelease(KeyEvent.VK_A);
-            robot.keyRelease(KeyEvent.VK_CONTROL);
+        // Ctrl + C
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_C);
+        robot.keyRelease(KeyEvent.VK_C);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
 
-            robot.keyPress(KeyEvent.VK_CONTROL);
-            robot.keyPress(KeyEvent.VK_C);
-            robot.keyRelease(KeyEvent.VK_C);
-            robot.keyRelease(KeyEvent.VK_CONTROL);
+        // Tab
+        robot.keyPress(KeyEvent.VK_TAB);
+        robot.keyRelease(KeyEvent.VK_TAB);
 
-            permanentAddress.click();
+        // Ctrl + V
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
 
-            robot.keyPress(KeyEvent.VK_CONTROL);
-            robot.keyPress(KeyEvent.VK_V);
-            robot.keyRelease(KeyEvent.VK_V);
-            robot.keyRelease(KeyEvent.VK_CONTROL);
+        // Tab
+        robot.keyPress(KeyEvent.VK_TAB);
+        robot.keyRelease(KeyEvent.VK_TAB);
 
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
+        // Enter
+        robot.keyPress(KeyEvent.VK_ENTER);
+        robot.keyRelease(KeyEvent.VK_ENTER);
+
         return this;
     }
+
+    @FindBy(css = "p#currentAddress")
+    WebElement currentAddressResult;
+    @FindBy(css = "p#permanentAddress")
+    WebElement permanentAddressResult;
 
     public TextBoxPage verifyCopyPasteAddress() {
-        String currentAddressText = currentAddress.getAttribute("value");
-        String permanentAddressText = permanentAddress.getAttribute("value");
-
-        if (!currentAddressText.equals(permanentAddressText)) {
-            throw new AssertionError("The Permanent Address does not match the Current Address");
-        }
-        return this;
-    }
-
-    public TextBoxPage selectTextBox() {
-
-        WebElement textBoxMenu = driver.findElement(By.xpath("//span[.='Text Box']"));
-        textBoxMenu.click();
+        String[] current = currentAddressResult.getText().split(":");
+        String[] permanent = permanentAddressResult.getText().split(":");
+        Assert.assertEquals(current[1],permanent[1]);
         return this;
     }
 }

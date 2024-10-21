@@ -1,7 +1,6 @@
 package demoqa.pages;
 
 import demoqa.core.BasePage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -58,12 +57,21 @@ public class SidePage extends BasePage {
         return new ButtonsPage(driver);
     }
 
-    //* TextBox
+    //* Text box
     @FindBy(xpath = "//span[.='Text Box']")
     WebElement textBox;
 
     public TextBoxPage selectTextBox() {
         click(textBox);
         return new TextBoxPage(driver);
+    }
+
+    //* Practice Form
+    @FindBy(xpath = "//span[.='Practice Form']")
+    WebElement practiceForm;
+
+    public PracticeFormPage selectPracticeForm() {
+        click(practiceForm);
+        return new PracticeFormPage(driver);
     }
 }
